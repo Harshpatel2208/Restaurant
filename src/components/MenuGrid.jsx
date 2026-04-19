@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Leaf } from 'lucide-react';
 import './MenuGrid.css';
+import { getApiUrl } from '../config/api';
 
 const CATEGORIES = ['All', 'Punjabi', 'Rajasthani', 'South Indian', 'Chinese'];
 
@@ -11,7 +12,7 @@ export default function MenuGrid() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/menu')
+    fetch(getApiUrl('/api/menu'))
       .then(res => res.json())
       .then(data => {
         setMenuData(data);

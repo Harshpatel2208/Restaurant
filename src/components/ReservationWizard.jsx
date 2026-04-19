@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ReservationWizard.css';
+import { getApiUrl } from '../config/api';
 
 const TIME_SLOTS = ["6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM"];
 
@@ -88,7 +89,7 @@ export default function ReservationWizard() {
 
   const confirmReservation = async () => {
     try {
-      const response = await fetch('/api/reservations', {
+      const response = await fetch(getApiUrl('/api/reservations'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +105,16 @@ export default function ReservationWizard() {
         // Reset or move to success step can be done here
         setStep(1);
       } else {
-        alert("Failed to secure table. Please try again.");
+        let message = 'Failed to secure table. Please try again.';
+        try {
+          const data = await response.json();
+          if (data?.error) {
+            message = data.error;
+          }
+        } catch {
+          // Keep fallback message if response body is not JSON.
+        }
+        alert(message);
       }
     } catch (err) {
       console.error(err);

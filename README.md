@@ -1,16 +1,32 @@
-# React + Vite
+# Restaurant App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Run Locally
 
-Currently, two official plugins are available:
+1. Install dependencies:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+```
 
-## React Compiler
+2. Start frontend + backend together:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm run dev
+```
 
-## Expanding the ESLint configuration
+This uses Vite proxy to forward `/api/*` to `http://localhost:5000` in local development.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Deployment Setup (Important)
+
+The frontend now reads API URLs from `VITE_API_BASE_URL`.
+
+- Local development: keep it unset and Vite proxy handles `/api`.
+- Production (Vercel/Netlify): set `VITE_API_BASE_URL` to your deployed backend base URL.
+
+Example:
+
+```env
+VITE_API_BASE_URL=https://your-backend-domain.com
+```
+
+If this value is missing in production and your API is not hosted on the same domain under `/api`, reservation and admin API calls will fail.

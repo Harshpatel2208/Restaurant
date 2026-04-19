@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
 import './ReservationWizard.css'; // For floor plan styling
+import { getApiUrl } from '../config/api';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('menu');
@@ -21,7 +22,7 @@ export default function AdminDashboard() {
 
   const fetchMenu = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/menu');
+      const res = await fetch(getApiUrl('/api/menu'));
       setMenuItems(await res.json());
     } catch (err) { console.error(err); }
   };
@@ -29,7 +30,7 @@ export default function AdminDashboard() {
   const fetchReservations = async () => {
     setLoadingRes(true);
     try {
-      const res = await fetch('http://localhost:5000/api/reservations');
+      const res = await fetch(getApiUrl('/api/reservations'));
       const data = await res.json();
       setReservations(data);
     } catch (err) {
@@ -89,7 +90,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     if (editingDishId) {
       try {
-        const res = await fetch(`http://localhost:5000/api/menu/${editingDishId}`, {
+        const res = await fetch(getApiUrl(`/api/menu/${editingDishId}`), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newDish)
@@ -108,7 +109,7 @@ export default function AdminDashboard() {
       }
     } else {
       try {
-        const res = await fetch('http://localhost:5000/api/menu', {
+        const res = await fetch(getApiUrl('/api/menu'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newDish)
@@ -141,7 +142,7 @@ export default function AdminDashboard() {
   const handleDeleteDish = async (id) => {
     if (!window.confirm("Are you sure you want to delete this dish?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/menu/${id}`, {
+      const res = await fetch(getApiUrl(`/api/menu/${id}`), {
         method: 'DELETE'
       });
       if (res.ok) {
@@ -155,7 +156,7 @@ export default function AdminDashboard() {
 
   const handleReleaseTable = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/reservations/${id}/release`, {
+      const res = await fetch(getApiUrl(`/api/reservations/${id}/release`), {
         method: 'PATCH'
       });
       if (res.ok) {
