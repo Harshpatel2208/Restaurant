@@ -1,0 +1,8 @@
+[
+  { "id": 1, "category": "Punjabi", "name": "Shahi Paneer Royale", "price": 450, "description": "Fresh cottage cheese in a rich, cashew-nut tomato gravy with aromatic spices." },
+  { "id": 2, "category": "Rajasthani", "name": "Dal Baati Churma", "price": 550, "description": "The quintessential Rajasthani trio: spicy dal, wood-fired baatis, and sweet churma." },
+  { "id": 3, "category": "South Indian", "name": "Ghee Roast Masala Dosa", "price": 320, "description": "Crispy golden dosa roasted in pure A2 ghee, served with 3 types of chutneys and sambar." },
+  { "id": 4, "category": "Chinese", "name": "Truffle Chilli Paneer", "price": 480, "description": "Wok-tossed paneer cubes with bell peppers, finished with a hint of truffle oil." },
+  { "id": 5, "category": "Rajasthani", "name": "Gatte Ki Sabzi", "price": 380, "description": "Gram flour dumplings simmered in a tangy, spiced yogurt-based gravy." },
+  { "id": 6, "category": "Punjabi", "name": "Dal Makhani", "price": 420, "description": "Black lentils slow-cooked overnight with cream and butter for a silky texture." }
+]
