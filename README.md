@@ -131,6 +131,8 @@ Set one of the following database configurations in Vercel Project Settings:
 DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DBNAME
 ```
 
+Vercel also works with `POSTGRES_URL` (from Vercel Postgres integration) or `NEON_DATABASE_URL`.
+
 2. Or individual variables:
 
 ```env
@@ -156,3 +158,17 @@ VITE_API_BASE_URL=https://your-backend-domain.com
 ```
 
 If this value is missing in production and your API is not hosted on the same domain under `/api`, reservation and admin API calls will fail.
+
+### Quick Production Checklist
+
+1. Create a cloud PostgreSQL database (Neon/Supabase/Railway/Vercel Postgres).
+2. Copy the connection string.
+3. In Vercel: Project Settings -> Environment Variables -> add `DATABASE_URL`.
+4. Redeploy the latest commit.
+5. Open `/api/status` on your deployed domain.
+
+Expected success response:
+
+```json
+{ "status": "ok", "time": "..." }
+```

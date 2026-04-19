@@ -5,20 +5,59 @@ import { Pool } from 'pg';
 let pool;
 let initPromise;
 
+function getConnectionString() {
+  return (
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL_NON_POOLING ||
+    process.env.NEON_DATABASE_URL ||
+    ''
+  );
+}
+
+function hasDiscreteDbConfig() {
+  return Boolean(
+    process.env.DB_USER &&
+    process.env.DB_HOST &&
+    process.env.DB_NAME &&
+    process.env.DB_PASSWORD &&
+    process.env.DB_PORT
+  );
+}
+
 function buildPoolConfig() {
-  if (process.env.DATABASE_URL) {
+  const connectionString = getConnectionString();
+  if (connectionString) {
     return {
-      connectionString: process.env.DATABASE_URL,
+      connectionString,
       ssl: { rejectUnauthorized: false }
     };
   }
 
+  if (hasDiscreteDbConfig()) {
+    return {
+      user: process.env.DB_USER,
+      host: process.env.DB_HOST,
+      database: process.env.DB_NAME,
+      password: process.env.DB_PASSWORD,
+      port: Number(process.env.DB_PORT)
+    };
+  }
+
+  const isProduction = process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
+  if (isProduction) {
+    throw new Error(
+      'Database is not configured. Set DATABASE_URL (or POSTGRES_URL) in Vercel Environment Variables.'
+    );
+  }
+
   return {
-    user: process.env.DB_USER || 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    database: process.env.DB_NAME || 'restaurant',
-    password: process.env.DB_PASSWORD || '',
-    port: Number(process.env.DB_PORT || 5432)
+    user: 'postgres',
+    host: 'localhost',
+    database: 'restaurant',
+    password: '',
+    port: 5432
   };
 }
 

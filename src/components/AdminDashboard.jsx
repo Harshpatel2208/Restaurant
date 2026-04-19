@@ -20,6 +20,15 @@ export default function AdminDashboard() {
     description: ''
   });
 
+  const readErrorMessage = async (res, fallback) => {
+    try {
+      const data = await res.json();
+      return data?.error || data?.details || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
   const fetchMenu = async () => {
     try {
       const res = await fetch(getApiUrl('/api/menu'));
@@ -101,7 +110,7 @@ export default function AdminDashboard() {
           setEditingDishId(null);
           fetchMenu();
         } else {
-          alert('Failed to update dish.');
+          alert(await readErrorMessage(res, 'Failed to update dish.'));
         }
       } catch (err) {
         console.error(err);
@@ -119,7 +128,7 @@ export default function AdminDashboard() {
           setNewDish({ category: 'Punjabi', name: '', price: '', description: '' });
           fetchMenu();
         } else {
-          alert('Failed to add dish.');
+          alert(await readErrorMessage(res, 'Failed to add dish.'));
         }
       } catch (err) {
         console.error(err);
