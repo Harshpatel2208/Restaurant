@@ -4,6 +4,7 @@ import { Pool } from 'pg';
 
 let pool;
 let initPromise;
+let schemaBootstrapSkipped = false;
 
 function getConnectionString() {
   return (
@@ -90,6 +91,16 @@ async function seedMenuIfEmpty(poolInstance) {
 }
 
 export async function ensureSchema() {
+  const isProduction = process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
+  const shouldBootstrapInProduction = process.env.DB_BOOTSTRAP_SCHEMA === 'true';
+
+  // In serverless production, repeated CREATE/ALTER checks add latency.
+  // Keep runtime requests fast and run bootstrap only when explicitly enabled.
+  if (isProduction && !shouldBootstrapInProduction) {
+    schemaBootstrapSkipped = true;
+    return;
+  }
+
   if (initPromise) {
     return initPromise;
   }
@@ -132,4 +143,8 @@ export async function ensureSchema() {
   });
 
   return initPromise;
+}
+
+export function didSkipSchemaBootstrap() {
+  return schemaBootstrapSkipped;
 }

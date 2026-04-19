@@ -1,4 +1,4 @@
-import { ensureSchema, getPool } from './_lib/db.js';
+import { ensureSchema, didSkipSchemaBootstrap, getPool } from './_lib/db.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -8,7 +8,11 @@ export default async function handler(req, res) {
   try {
     await ensureSchema();
     const result = await getPool().query('SELECT NOW()');
-    return res.status(200).json({ status: 'ok', time: result.rows[0].now });
+    return res.status(200).json({
+      status: 'ok',
+      time: result.rows[0].now,
+      bootstrapMode: didSkipSchemaBootstrap() ? 'skipped-in-production' : 'enabled'
+    });
   } catch (error) {
     console.error('Status check failed:', error);
     return res.status(500).json({ error: 'Database connection failed', details: error.message });

@@ -172,3 +172,16 @@ Expected success response:
 ```json
 { "status": "ok", "time": "..." }
 ```
+
+### Performance Note (Serverless)
+
+To reduce latency on Vercel, schema bootstrap queries (`CREATE TABLE` / `ALTER TABLE`) are skipped in production runtime requests.
+
+- Default production behavior: fast requests, bootstrap skipped.
+- If you need runtime bootstrap once, set:
+
+```env
+DB_BOOTSTRAP_SCHEMA=true
+```
+
+After bootstrap is done, remove it or set it back to `false` for best performance.
