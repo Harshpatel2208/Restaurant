@@ -119,10 +119,35 @@ This project is open source. Feel free to fork, adapt, and build on it.
 
 ## 🌐 Deployment Setup (Important)
 
-The frontend reads API URLs from `VITE_API_BASE_URL`.
+This project now includes Vercel serverless API routes under `/api/*`.
+
+### Required Vercel Environment Variables
+
+Set one of the following database configurations in Vercel Project Settings:
+
+1. Recommended (single variable):
+
+```env
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DBNAME
+```
+
+2. Or individual variables:
+
+```env
+DB_USER=postgres
+DB_HOST=your-db-host
+DB_NAME=restaurant
+DB_PASSWORD=your-db-password
+DB_PORT=5432
+```
+
+### Optional Frontend API Base URL
+
+The frontend also supports `VITE_API_BASE_URL` for cases where API is hosted on a separate domain.
 
 - Local development: keep it unset and Vite proxy handles `/api`.
-- Production (Vercel/Netlify): set `VITE_API_BASE_URL` to your deployed backend base URL.
+- Production same-domain API (recommended on Vercel): keep it unset and use built-in `/api/*` routes.
+- Production separate backend: set `VITE_API_BASE_URL` to your backend base URL.
 
 Example:
 
